@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/eu.ddmore.mdl.converter.pharmml.feature_1.0.0.qualifier.jar" id="eu.ddmore.mdl.converter.pharmml.feature" version="1.0.0.qualifier">
+      <category name="eu.ddmore.mdl"/>
+   </feature>
+   <category-def name="eu.ddmore.mdl" label="MDL Language Editor"/>
+   <repository-reference location="http://downloads.mdl.community/repository/mdl2PharmmPlugin/updates" enabled="true" />
+</site>
