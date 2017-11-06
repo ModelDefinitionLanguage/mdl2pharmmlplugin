@@ -52,6 +52,10 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 		this(mog, priorDsWriter, null)
 	}
 	
+	/**
+	 * The path to the source directory where dependent files are located.
+	 * If provide then the dependent files are written as an absolute paths. 
+	 */
 	new(MclObject mog, AbstractParameterWriter priorDsWriter, Path referencePath){
 		mObj = mog.mdlObj
 		dObj = mog.dataObj
