@@ -1,63 +1,42 @@
 package eu.ddmore.converter.mdl2pharmml08
 
+import com.google.inject.Inject
 import eu.ddmore.mdl.scoping.MdlImportURIGlobalScopeProvider
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.util.Map
+import org.apache.commons.io.IOUtils
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.eclipse.xtext.util.LazyStringInputStream
-import org.eclipse.xtext.resource.XtextResource
-import eu.ddmore.mdl.MdlStandaloneSetup
-import com.google.inject.Inject
+
+/**
+ * Provides parsing functionality for unit test.
+ * This class takes care of initialising the parser and makes sure that the definitions
+ * can be loaded from the definitions bundle.
+ * Not that the handing of the definitions behaves differently depending if the tests are run
+ * from maven or not. 
+ */
 
 class MdlTestHelper<T extends EObject> {
-//	@Inject extension ParseHelper<T>	
-
 	@Inject
     private XtextResourceSet resourceSet;
 
-//	def loadLibAndParse(CharSequence p) {
-//		p.parse(loadLib)
-//	}
-	
 	def parse(CharSequence p) {
-//		p.parse(loadLib)
-		
 		parse(getAsStream(p), resourceSet)
 	}
 	
 	def parse(CharSequence p, XtextResourceSet rs) {
-//		p.parse(loadLib)
-		
 		parse(getAsStream(p), rs)
 	}
 	
-//	def parse(CharSequence p, URI uri){
-//		p.parse(uri, loadLib)
-//	}
-	
-
-//    new() {
-//        setupParser();
-//    }
- 
 	def private InputStream getAsStream(CharSequence text) {
-		return new LazyStringInputStream(if(text == null) "" else text.toString());
+		return new LazyStringInputStream(if(text === null) "" else text.toString());
 	}
 
-//    def private void setupParser() {
-////        new StandaloneSetup().setPlatformUri("../");
-////        var Injector injector = Guice.createInjector(new MdlRuntimeModule());
-////        injector.injectMembers(this);
-//		new eu.ddmore.mdllib.MdlLibStandaloneSetup().createInjectorAndDoEMFRegistration();
-//        val injector = new MdlStandaloneSetup().createInjectorAndDoEMFRegistration();
-//        resourceSet = injector.getInstance(XtextResourceSet);
-//        resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
-//        registerURIMappingsForImplicitImports(resourceSet);
-//    }
- 
     /**
      * Parses an input stream and returns the resulting object tree root element.
      * @param in Input Stream
@@ -71,11 +50,6 @@ class MdlTestHelper<T extends EObject> {
         return resource.getContents().get(0) as T;
     }
  
-//    def T parse(URI uri) {
-//        val resource = resourceSet.getResource(uri, true);
-//        return resource.getContents().get(0) as T;
-//    }
-	
     def private static void registerURIMappingsForImplicitImports(XtextResourceSet resourceSet) {
         val uriConverter = resourceSet.getURIConverter();
         val uriMap = uriConverter.getURIMap();
@@ -83,28 +57,33 @@ class MdlTestHelper<T extends EObject> {
     }
  
     def private static void registerPlatformToFileURIMapping(URI uri, Map<URI, URI> uriMap) {
-//        val fileURI = createFileURIForHeaderFile(uri);
-//        val fileURI = createClasspathURIForHeaderFile(uri);
-        val fileURI = uri;
-//        val file = new File(fileURI.toFileString());
-//        Preconditions.checkArgument(file.exists());
+		var fileURI = createFileFromBundle(uri)
+		if(fileURI === null){
+			// as a fallback use the original uri 
+			fileURI = uri
+		}
         uriMap.put(uri, fileURI);
         
     }
  
- 	def private static URI createClasspathURIForHeaderFile(URI uri) {
+ 	def private static URI createFileFromBundle(URI uri) {
 		var path = uri.path().replace("/plugin/", ""); // Eclipse RCP platform URL to a plugin resource starts with "/plugin/" so strip this off 
-		path = path.substring(path.indexOf("/")); // This skips past the plugin name, i.e. eu.ddmore.mdl.definitions/
-		// Now we're just left with the path to the resource within the plugin; the built plugin JAR is available on the classpath, so create a classpath URI pointing at this resource
-//		System.err.println("Path = " + path.toString)
-		return URI.createURI("classpath:" + path);
+		path = path.substring(path.indexOf("/")+1); // This skips past the plugin name, i.e. eu.ddmore.mdl.definitions/
+ 		var url = MdlTestHelper.classLoader.getResource(path)
+ 		if(url !== null){
+//			System.out.println("jar url=" + url.toString())
+			val in = url.openStream
+			val tmpFile = File.createTempFile("mdlLib", ".mlib")
+//			System.out.println("tmpfile =" + tmpFile.absolutePath)
+			val out = new FileOutputStream(tmpFile)
+			IOUtils.copy(in, out)
+			in.close
+			out.close
+			tmpFile.deleteOnExit
+			URI.createFileURI(tmpFile.absolutePath)
+		}
+		else{
+			null
+		}
 	}
-
-    def private static URI createFileURIForHeaderFile(URI uri) {
-        return URI.createFileURI(deriveFilePathFromURI(uri));
-    }
- 
-    def private static String deriveFilePathFromURI(URI uri) {
-        return "../../mdleditorplugin/" + uri.path().substring(7);
-    }
 }
