@@ -303,12 +303,14 @@ class PriorParameterWriter extends AbstractParameterWriter {
 						<ds:Definition>
 							«FOR col : firstAttributeList.getAttributeExpression('column').vector ?: Collections::emptyList»
 								«IF col instanceof StringLiteral»
-									<ds:Column columnId="«col.stringValue»" valueType="real" columnNum="«colIdx++»"/>
+									<ds:Column columnId="«col.stringValue»" valueType="real" columnNum="«colIdx++»" columnType="undefined"/>
 								«ENDIF»
 							«ENDFOR»
 						</ds:Definition>
 						<ds:ExternalFile oid="«getSyntheticFileOid(name)»">
 							<ds:path>«firstAttributeList.getAttributeExpression('file').stringValue ?: 'Error!'»</ds:path>
+							<ds:format>«IF firstAttributeList.getAttributeExpression('inputFormat') !== null»«firstAttributeList.getAttributeEnumValue('inputFormat').toUpperCase»«ELSE»CSV«ENDIF»</ds:format>
+							<ds:delimiter>COMMA</ds:delimiter>
 						</ds:ExternalFile>
 					</ds:DataSet>
 				</ExternalDataSet>
