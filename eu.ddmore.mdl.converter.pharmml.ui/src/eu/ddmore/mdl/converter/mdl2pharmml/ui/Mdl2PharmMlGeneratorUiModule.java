@@ -23,8 +23,11 @@ public class Mdl2PharmMlGeneratorUiModule extends AbstractGenericModule {
     /**
      * Bind the JavaProjectBasedBuilderParticipant in order to invoke the generator during the build.
      */
-    public Class<? extends org.eclipse.xtext.builder.IXtextBuilderParticipant> bindIXtextBuilderParticipant() {
-        return org.eclipse.xtext.builder.JavaProjectBasedBuilderParticipant.class;
-    }
+//    public Class<? extends org.eclipse.xtext.builder.IXtextBuilderParticipant> bindIXtextBuilderParticipant() {
+//        return org.eclipse.xtext.builder.JavaProjectBasedBuilderParticipant.class;
+//    }
  
+    public Class<? extends org.eclipse.xtext.builder.IXtextBuilderParticipant> bindIXtextBuilderParticipant() {
+        return org.eclipse.xtext.builder.BuilderParticipant.class;
+    }
 }
