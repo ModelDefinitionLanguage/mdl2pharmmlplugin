@@ -80,6 +80,6 @@ location "http://downloads.mdl.community/repository/libpharmml/releases/0.7.4.v2
 	eu.ddmore.libpharmml.feature.feature.group
 } 
 
-location "http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.1.v20170301-1515/" mdleditor-repo {
+location "http://downloads.mdl.community/repository/mdleditor/releases/1.6.1/" mdleditor-repo {
 	eu.ddmore.mdl.feature.feature.group
 }
