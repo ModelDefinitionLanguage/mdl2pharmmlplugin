@@ -2,7 +2,7 @@
 <feature
       id="eu.ddmore.mdl.converter.pharmml.feature"
       label="MDL to PharmML Converter Plugin"
-      version="1.0.0.qualifier"
+      version="1.0.0"
       provider-name="DDMoRe Project">
 
    <description>

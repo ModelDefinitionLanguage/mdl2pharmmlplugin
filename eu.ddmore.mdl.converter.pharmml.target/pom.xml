@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>eu.ddmore</groupId>
 		<artifactId>eu.ddmore.mdl.converter.pharmml.parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>
 
 	<artifactId>eu.ddmore.mdl.converter.pharmml.target</artifactId>
