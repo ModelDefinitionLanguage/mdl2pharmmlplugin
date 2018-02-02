@@ -18,10 +18,12 @@ import eu.ddmore.mdl.utils.ExpressionUtils
 import eu.ddmore.mdl.utils.MdlUtils
 import eu.ddmore.mdl.validation.MdlValidator
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
+import java.nio.file.Path
 import java.util.ArrayList
 import java.util.Collections
 import java.util.HashSet
 import java.util.Set
+import java.nio.file.Paths
 
 class PriorParameterWriter extends AbstractParameterWriter {
 
@@ -35,10 +37,16 @@ class PriorParameterWriter extends AbstractParameterWriter {
 
 	val MclObject priorObject
 	val Set<String> writtenParams
+	val Path relativePath
 	
-	new(MclObject mO, MclObject pO){ //}, () => SymbolDefinition findMatchingIdLevelInBlockLambda){
-		super(mO) //, findMatchingIdLevelInBlockLambda)
+	new(MclObject mO, MclObject pO){
+		this(mO, pO, null)
+	}
+
+	new(MclObject mO, MclObject pO, Path relativePath){
+		super(mO) 
 		this.priorObject = pO
+		this.relativePath = relativePath
 		this.writtenParams = new HashSet<String>
 	}
 	
@@ -48,15 +56,10 @@ class PriorParameterWriter extends AbstractParameterWriter {
 		if(!writtenParams.contains(stmt.name)){
 			writtenParams.add(stmt.name)
 			'''
-«««				«IF priorObjDefn instanceof RandomVariableDefinition»
-«««					«IF priorObjDefn.isNonParametricDistn»
-«««						<PopulationParameter symbId="«priorObjDefn.name»" />
-«««					«ENDIF»
-«««				«ENDIF»
-				«IF priorObjDefn != null»
+				«IF priorObjDefn !== null»
 					<PopulationParameter symbId="«stmt.name»">
 						«IF priorObjDefn instanceof EquationTypeDefinition»
-							«IF priorObjDefn.expression != null /*&& !priorObjDefn.expression.isLiteralExpression*/»
+							«IF priorObjDefn.expression !== null /*&& !priorObjDefn.expression.isLiteralExpression*/»
 								«priorObjDefn.priorExpression»
 							«ENDIF»
 						«ELSE»
@@ -145,7 +148,7 @@ class PriorParameterWriter extends AbstractParameterWriter {
 	
 	override writeSimpleParameter(SymbolDefinition stmt)'''
 		«IF stmt instanceof EquationTypeDefinition»
-			<PopulationParameter symbId="«stmt.name»"«IF stmt.expression !=null»>
+			<PopulationParameter symbId="«stmt.name»"«IF stmt.expression !== null»>
 				«stmt.expression.expressionAsAssignment»
 			</PopulationParameter>«ELSE»/>«ENDIF»
 		«ENDIF»
@@ -295,6 +298,7 @@ class PriorParameterWriter extends AbstractParameterWriter {
 				inputStmts.add(stmt)
 			]
 		]
+		val fileUrl = FileUtils.generateUrl(Paths.get(firstAttributeList.getAttributeExpression('file').stringValue ?: "error"), this.relativePath)
 		'''
 			«IF !inputStmts.isEmpty»
 				<ExternalDataSet oid="«name»">
@@ -308,7 +312,7 @@ class PriorParameterWriter extends AbstractParameterWriter {
 							«ENDFOR»
 						</ds:Definition>
 						<ds:ExternalFile oid="«getSyntheticFileOid(name)»">
-							<ds:path>«firstAttributeList.getAttributeExpression('file').stringValue ?: 'Error!'»</ds:path>
+							<ds:path>«fileUrl ?: 'Error!'»</ds:path>
 							<ds:format>«IF firstAttributeList.getAttributeExpression('inputFormat') !== null»«firstAttributeList.getAttributeEnumValue('inputFormat').toUpperCase»«ELSE»CSV«ENDIF»</ds:format>
 							<ds:delimiter>COMMA</ds:delimiter>
 						</ds:ExternalFile>

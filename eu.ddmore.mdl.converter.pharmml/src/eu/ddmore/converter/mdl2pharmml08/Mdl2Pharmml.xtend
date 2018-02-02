@@ -47,7 +47,7 @@ class Mdl2Pharmml {
 	}
 	
 	def private getPharmMLInfoHeader(MclObject it)'''
-		«IF getBlocksByName(BlockDefinitionTable::MOG_INFO_BLK) != null»
+		«IF getBlocksByName(BlockDefinitionTable::MOG_INFO_BLK) !== null»
 			«IF getBlocksByName(BlockDefinitionTable::MOG_INFO_BLK).isEmpty»
 				«writeDefaultName»
 			«ELSE»
@@ -74,17 +74,18 @@ class Mdl2Pharmml {
   		mdlRoot = rewriteTree(EcoreUtil2.getContainerOfType(mogInput.eContainer, Mcl))
   		val mog = mdlRoot.getMogObj(mogInput.name)
 		val mObj = mog.mdlObj
+		val relativePath = if(mdlParentPath !== null) Paths.get(mdlParentPath) else null
   		
 		val paramWriter = if(mog.isParamObjDefined){
 			new StandardParameterWriter(mog.mdlObj)//, idLambda)
 		}
 		else{
-			new PriorParameterWriter(mObj, mog.priorObj) //, idLambda)
+			new PriorParameterWriter(mObj, mog.priorObj, relativePath) //, idLambda)
 		}
 		val TrialDesignObjectPrinter trialDesignWriter = if(mog.isDesignObjDefined)
 									new TrialDesignDesignObjectPrinter(mog, paramWriter)
 								else
-									new TrialDesignDataObjectPrinter(mog, paramWriter, if(mdlParentPath != null) Paths.get(mdlParentPath) else null)
+									new TrialDesignDataObjectPrinter(mog, paramWriter, relativePath)
 		'''
 			<?xml version="1.0" encoding="UTF-8"?>
 			<PharmML 

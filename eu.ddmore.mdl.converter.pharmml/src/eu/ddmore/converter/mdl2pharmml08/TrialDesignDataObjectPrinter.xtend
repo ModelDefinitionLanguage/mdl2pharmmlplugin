@@ -5,31 +5,29 @@ import eu.ddmore.mdl.mdl.CategoricalDefinitionExpr
 import eu.ddmore.mdl.mdl.CategoryValueReference
 import eu.ddmore.mdl.mdl.EnumExpression
 import eu.ddmore.mdl.mdl.EquationDefinition
+import eu.ddmore.mdl.mdl.FunctionReference
 import eu.ddmore.mdl.mdl.ListDefinition
 import eu.ddmore.mdl.mdl.MappingExpression
 import eu.ddmore.mdl.mdl.MappingPair
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.mdl.SymbolReference
+import eu.ddmore.mdl.provider.BlockArgumentDefinitionProvider
+import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.provider.ListDefinitionProvider
 import eu.ddmore.mdl.provider.ListDefinitionTable
 import eu.ddmore.mdl.provider.MogDefinitionProvider
+import eu.ddmore.mdl.utils.DomainObjectModelUtils
+import eu.ddmore.mdl.utils.ExpressionUtils
 import eu.ddmore.mdl.utils.MdlUtils
 import eu.ddmore.mdllib.mdllib.Expression
 import eu.ddmore.mdllib.mdllib.SymbolDefinition
+import java.nio.file.Path
 import java.util.HashSet
 
 import static eu.ddmore.converter.mdl2pharmml08.Constants.*
 
 import static extension eu.ddmore.mdl.utils.ExpressionConverter.convertToString
-import eu.ddmore.mdl.utils.DomainObjectModelUtils
-import eu.ddmore.mdl.provider.BlockDefinitionTable
-import eu.ddmore.mdl.mdl.FunctionReference
-import eu.ddmore.mdl.utils.ExpressionUtils
-import eu.ddmore.mdl.provider.BlockArgumentDefinitionProvider
 import java.nio.file.Paths
-import java.nio.file.Files
-import java.nio.file.LinkOption
-import java.nio.file.Path
 
 class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 	extension MdlUtils mu = new MdlUtils 
@@ -66,7 +64,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 	override writeTrialDesign()'''
 		<TrialDesign xmlns="«xmlns_design»">
 			«priorDsWriter.writeAllDatasets»
-			«IF mObj != null && dObj != null»
+			«IF mObj !== null && dObj !== null»
 				«writeTargetDataSet»
 			«ENDIF»
 		</TrialDesign>
@@ -74,10 +72,10 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 
 	def writeTargetDataSet() {
 		var res = "";
-		if (dObj != null || mObj != null) {
+		if (dObj !== null || mObj !== null) {
 			val s = dObj.dataSourceStmt
 				// get first statement
-			if (s != null){
+			if (s !== null){
 				if(s.firstAttributeList.getAttributeEnumValue('inputFormat') == 'nonmemFormat') {
 					var content = print_ds_NONMEM_DataSet;
 					res = res + writeExternalDataSet(content, if(modelContainsAdministrationMacros) "Monolix" else "NONMEM", BLK_DS_NONMEM_DATASET);
@@ -115,7 +113,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 		val varBlks = getBlocksByName(BlockDefinitionTable::VAR_LVL_BLK_NAME)
 		if(!varBlks.isEmpty){
 			val refId  = varBlks.head.blkArgs.getArgumentExpression("reference").symbolRef
-			if(refId != null){
+			if(refId !== null){
 				retVal += print_ds_ColumnMapping(dataVar, refId.ref, '')
 				saveMappedColumn(dataVar.name)
 			}
@@ -155,7 +153,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 					}
 				}
 				case(ListDefinitionTable::IDV_USE_VALUE):{
-					if(mObj.mdlIdv != null){
+					if(mObj.mdlIdv !== null){
 						res += mObj.writeIdvMapping(column)
 						// record that mapping to model found
 						saveMappedColumn(column.name)
@@ -256,7 +254,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 	
 	def CharSequence writeDerivedMapping(MclObject mdlObj, ListDefinition column){
 		val divCol = column.firstAttributeList.getAttributeExpression('column').symbolRef?.ref
-		if(divCol != null){
+		if(divCol !== null){
 			var mdlSymb = mdlObj.findMdlSymbolDefn(column.name)
 			if(divCol instanceof ListDefinition)
 				print_ds_ColumnMapping(divCol, mdlSymb, "")
@@ -272,7 +270,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 			val mapping = defineAtt.attList.findFirst[mp|
 				mp.rightOperand.symbolRef?.ref.name == dosingVar.name
 			]
-			if(mapping != null)
+			if(mapping !== null)
 				return mapping.leftOperand.integerValue
 		}
 		return -1
@@ -295,7 +293,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 				<math:Piece>
 					«mdlDtSymb.symbolReference»
 					<math:Condition>
-						«IF cmtCol != null»
+						«IF cmtCol !== null»
 							<math:LogicBinop op="and">
 								<math:LogicBinop op="gt">
 									<ds:ColumnRef columnIdRef="«amtCol.name»"/>
@@ -392,7 +390,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 	
 	protected def print_ds_StandardAmtMapping(ListDefinition amtColumn) {
 		val define = amtColumn.firstAttributeList.getAttributeExpression('define');
-		if (define == null) {
+		if (define === null) {
 			val varDefn = amtColumn.firstAttributeList.getAttributeExpression('variable');
 			if(varDefn instanceof SymbolReference){
 				if(!hasCompartmentDosing(varDefn.ref)){
@@ -408,7 +406,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 	def print_ds_TargetMapping(ListDefinition amtColumn){
 		val define = amtColumn.firstAttributeList.getAttributeExpression('define');
 		var toolMappingDefn = '''''';
-		if (define != null) {
+		if (define !== null) {
 			// There really must be define in this case.
 			switch(define){
 				MappingExpression:
@@ -490,7 +488,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 
 	protected def print_ds_ColumnMapping(ListDefinition column, SymbolDefinition mdlSymb, String complexMapping, String transformId) '''
 		<ColumnMapping>
-			<ColumnRef xmlns="«xmlns_ds»"«IF transformId != null» transformIdRef="«transformId»"«ENDIF» columnIdRef="«column.name»"/>
+			<ColumnRef xmlns="«xmlns_ds»"«IF transformId !== null» transformIdRef="«transformId»"«ENDIF» columnIdRef="«column.name»"/>
 			«mdlSymb.symbolReference»
 			«IF complexMapping.length > 0»
 				«complexMapping»
@@ -677,7 +675,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 	def print_ds_DvMapping(ListDefinition dvColumn){
 		var CharSequence retVal = ''''''
 		val variable = dvColumn.firstAttributeList.getAttributeExpression('variable');
-		if (variable != null && mObj.isDefinedInMdlObservations(variable)) {
+		if (variable !== null && mObj.isDefinedInMdlObservations(variable)) {
 			// Reference or mapped to data
 			retVal = writeSingleObsMapping(dvColumn, variable)
 			saveMappedColumn(dvColumn.name)
@@ -695,7 +693,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 	
 	def private boolean isTimeDependentCovariate(ListDefinition colCol, MclObject it){
 		val mdlCov = findMdlSymbolDefn(colCol.name)
-		if(mdlCov != null)
+		if(mdlCov !== null)
 			mdlCov.isIdvDepCovariate
 		else false
 	}
@@ -735,7 +733,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 			<DataSet xmlns="«xmlns_ds»">
 				<Definition>
 					«res»
-					«IF ignoreLineSymb != null»
+					«IF ignoreLineSymb !== null»
 						<IgnoreLine symbol="«ignoreLineSymb»"/>
 					«ENDIF»
 				</Definition>
@@ -748,7 +746,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 		for(mCov : mdlObj.mdlCovariateDefns){
 			switch(mCov){
 				EquationDefinition case(mCov.name == col.name):
-					return mCov.expression == null
+					return mCov.expression === null
 				SymbolDefinition case(mCov.name == col.name):
 					return true
 			}
@@ -757,7 +755,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 	}
 	
 	def isVariableUsedInModel(ListDefinition col, MclObject mdlObj){
-		mdlObj.findMdlSymbolDefn(col.name) != null
+		mdlObj.findMdlSymbolDefn(col.name) !== null
 	}
 	
 	
@@ -818,21 +816,23 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 	protected def print_ds_ExternalFile() {
 		var res = "";
 		val s = dObj.getDataSourceStmt
-		var file = "";
-		file = s.firstAttributeList.getAttributeExpression('file').convertToString
-		var dataPath = Paths.get(file)
-		if(!dataPath.isAbsolute){
-			if(this.referencePath != null){
-				dataPath = Paths.get(this.referencePath.toString, dataPath.toString)
-				if(Files.exists(dataPath, #[ LinkOption.NOFOLLOW_LINKS ])){
-					file = dataPath.toAbsolutePath().normalize().toString()
-				}
-			}
-		}
-		else{
-			file = dataPath.toString
-		}
-		if (file.length > 0) {
+//		var file = "";
+//		file = s.firstAttributeList.getAttributeExpression('file').convertToString
+//		var dataPath = Paths.get(file)
+//		if(!dataPath.isAbsolute){
+//			// Has reference path so write as an absolute file
+//			if(this.referencePath !== null){
+//				dataPath = Paths.get(this.referencePath.toString, dataPath.toString)
+//				if(Files.exists(dataPath, #[ LinkOption.NOFOLLOW_LINKS ])){
+//					file = dataPath.toAbsolutePath().normalize().toUri().toURL().toString();
+//				}
+//			}
+//		}
+//		else{
+//			file = dataPath.toString
+//		}
+		var file = FileUtils.generateUrl(Paths.get(s.firstAttributeList.getAttributeExpression('file').convertToString ?: "error"), this.referencePath)
+		if (file !== null && file.length > 0) {
 			res = res + '''				
 				<ExternalFile oid="«BLK_DS_IMPORT_DATA»">
 					<path>«file»</path>

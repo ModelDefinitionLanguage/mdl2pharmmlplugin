@@ -8,15 +8,17 @@ import eu.ddmore.mdl.utils.LibraryUtils
 import eu.ddmore.mdl.utils.MDLBuildFixture
 import eu.ddmore.mdl.utils.MdlLibUtils
 import eu.ddmore.mdllib.mdllib.Library
+import java.nio.file.Paths
 import org.eclipse.xtext.junit4.InjectWith
+import org.eclipse.xtext.junit4.TemporaryFolder
 import org.eclipse.xtext.junit4.XtextRunner
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import static org.junit.Assert.assertEquals
-import org.junit.Ignore
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
@@ -28,6 +30,9 @@ class PriorParameterWriterTest {
 	
 	var Library libDefns
 	var PriorParameterWriter testInstance
+
+	@Rule
+	public val TemporaryFolder folder = new TemporaryFolder() 
 	
 	@Before
 	def void setUp(){
@@ -165,7 +170,7 @@ class PriorParameterWriterTest {
 		assertEquals("Output as expected", expected, actual.toString)
 	}
 
-	@Ignore("Not sure how to encode in PharmML at the moment")
+	@Test
 	def void testWriteParamFromData(){
 		val root = createRoot
 		val priorObj = root.createObject("pObj", libDefns.getObjectDefinition('priorObj'))
@@ -181,7 +186,7 @@ class PriorParameterWriterTest {
 		val parmStmt = paramBlk.createEqnDefn('p1', createRealLiteral(22.0))
 		
 		
-		this.testInstance = new PriorParameterWriter(null, priorObj)
+		this.testInstance = new PriorParameterWriter(null, priorObj, null)
 		val actual = testInstance.writeParameter(parmStmt)
 		val expected = '''
 			<PopulationParameter symbId="p1"/>
@@ -189,6 +194,34 @@ class PriorParameterWriterTest {
 		assertEquals("Output as expected", expected, actual.toString)
 	}
 
+
+	@Test
+	def void testWriteParamFromDataWithAbsoluteUrl(){
+		val root = createRoot
+		val priorObj = root.createObject("pObj", libDefns.getObjectDefinition('priorObj'))
+//		val priorSrcBlk = priorObj.createBlock(libDefns.getBlockDefinition(BlockDefinitionTable::PRIOR_SOURCE_BLK))
+		
+		
+		
+		val priorBlk = priorObj.createBlock(libDefns.getBlockDefinition(BlockDefinitionTable::PRIOR_VAR_DEFN))
+		priorBlk.createEqnDefn('p111',createRealLiteral(2.0))
+		
+		val mdlObj = root.createObject("mObj", libDefns.getObjectDefinition('mdlObj'))
+		val paramBlk = mdlObj.createBlock(libDefns.getBlockDefinition(BlockDefinitionTable::MDL_STRUCT_PARAMS))
+		val parmStmt = paramBlk.createEqnDefn('p1', createRealLiteral(22.0))
+		
+		var fileName = "bar.txt"
+		val tstDataFile = folder.newFile(fileName)
+		val pwd = Paths.get("").toAbsolutePath()
+		val relative = pwd.relativize(tstDataFile.toPath)
+		
+		this.testInstance = new PriorParameterWriter(null, priorObj, relative)
+		val actual = testInstance.writeParameter(parmStmt)
+		val expected = '''
+			<PopulationParameter symbId="p1"/>
+		'''
+		assertEquals("Output as expected", expected, actual.toString)
+	}
 
 	@Test
 	def void testWriteVarLevels(){

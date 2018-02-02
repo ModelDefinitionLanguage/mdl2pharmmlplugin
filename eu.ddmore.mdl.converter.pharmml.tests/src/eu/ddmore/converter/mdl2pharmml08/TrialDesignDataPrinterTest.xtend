@@ -19,6 +19,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static org.junit.Assert.assertEquals
+import java.nio.file.Path
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
@@ -116,6 +117,7 @@ class TrialDesignDataPrinterTest {
 
 	@Test
 	def void testWriteDesignParametersRelativeExistsMdlInSame(){
+		// Defines a relative path and then generates an absolute path from it.
 		val mdl = createRoot
 		val dataObj = mdl.createObject("foo", libDefns.getObjectDefinition("dataObj"))
 		val mdlObj = mdl.createObject("foo2", libDefns.getObjectDefinition("mdlObj"))
@@ -132,13 +134,14 @@ class TrialDesignDataPrinterTest {
 		
 		val tdow = new TrialDesignDataObjectPrinter(mog, new StandardParameterWriter(null), tstMdlFile.parent)
 		val actual = tdow.writeTargetDataSet()
+		val expectedFName = relative.absUrlForRelativePath
 		val expected = '''
 			<ExternalDataSet toolName="NONMEM" oid="nm_ds">
 				<DataSet xmlns="http://www.pharmml.org/pharmml/0.8/Dataset">
 					<Definition>
 					</Definition>
 					<ExternalFile oid="id">
-						<path>«relative.toAbsolutePath.normalize.toString»</path>
+						<path>«expectedFName»</path>
 						<format>CSV</format>
 						<delimiter>COMMA</delimiter>
 					</ExternalFile>
@@ -146,6 +149,10 @@ class TrialDesignDataPrinterTest {
 			</ExternalDataSet>
 		'''
 		assertEquals("Output as expected", expected, actual.toString)
+	}
+	
+	def String getAbsUrlForRelativePath(Path relPath){
+		relPath.toAbsolutePath.normalize.toUri.toURL.toString
 	}
 
 	@Test
@@ -155,16 +162,16 @@ class TrialDesignDataPrinterTest {
 		val mdlObj = mdl.createObject("foo2", libDefns.getObjectDefinition("mdlObj"))
 		val mog = createMogDefn(mdl, dataObj, mdlObj)
 		val desBlk = dataObj.createBlock(libDefns.getBlockDefinition(BlockDefinitionTable::DATA_SRC_BLK))
-		val tstFile = folder.newFile("bar.txt")
+		val tstFile = folder.newFile("bar.txt").toPath
 		val pwd = Paths.get("").toAbsolutePath()
-		val relative = pwd.relativize(tstFile.toPath)
+		val relative = pwd.relativize(tstFile)
 		desBlk.createListDefn(dataObj.name, createAssignPair("file", createStringLiteral(relative.toString)),
 			createEnumPair("inputFormat", "nonmemFormat")
 		)
 		
 		val tdow = new TrialDesignDataObjectPrinter(mog, new StandardParameterWriter(null), pwd)
 		val actual = tdow.writeTargetDataSet()
-		val expectedFName = tstFile.absolutePath
+		val expectedFName = tstFile.absUrlForRelativePath
 		val expected = '''
 			<ExternalDataSet toolName="NONMEM" oid="nm_ds">
 				<DataSet xmlns="http://www.pharmml.org/pharmml/0.8/Dataset">
