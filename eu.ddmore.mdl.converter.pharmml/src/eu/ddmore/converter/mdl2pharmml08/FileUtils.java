@@ -28,6 +28,10 @@ public class FileUtils {
 					}
 				}
 			}
+			else {
+				// need to make it a URL
+				retVal = dataPath.toAbsolutePath().toUri().toURL().toString();
+			}
 		}
 		catch(MalformedURLException e) {
 			throw new RuntimeException(e);
