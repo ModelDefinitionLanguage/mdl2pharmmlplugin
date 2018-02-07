@@ -3,12 +3,12 @@ package eu.ddmore.converter.mdl2pharmml08
 import com.google.inject.Inject
 import eu.ddmore.mdl.MdlAndLibInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
+import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.provider.BlockDefinitionTable
 import eu.ddmore.mdl.utils.LibraryUtils
 import eu.ddmore.mdl.utils.MDLBuildFixture
 import eu.ddmore.mdl.utils.MdlLibUtils
 import eu.ddmore.mdllib.mdllib.Library
-import java.nio.file.Paths
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.TemporaryFolder
 import org.eclipse.xtext.junit4.XtextRunner
@@ -19,7 +19,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static org.junit.Assert.assertEquals
-import eu.ddmore.mdl.mdl.MclObject
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
@@ -314,7 +313,7 @@ class PriorParameterWriterTest {
 					<ds:Column columnId="bin_tlag" valueType="real" columnNum="4" columnType="undefined"/>
 				</ds:Definition>
 				<ds:ExternalFile oid="MDL__fileOid_d1">
-					<ds:path>file:/foo/bar/absolute/simple3_prior.csv</ds:path>
+					<ds:path>/foo/bar/absolute/simple3_prior.csv</ds:path>
 					<ds:format>CSV</ds:format>
 					<ds:delimiter>COMMA</ds:delimiter>
 				</ds:ExternalFile>

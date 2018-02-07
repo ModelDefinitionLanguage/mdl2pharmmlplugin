@@ -298,7 +298,7 @@ class PriorParameterWriter extends AbstractParameterWriter {
 				inputStmts.add(stmt)
 			]
 		]
-		val fileUrl = FileUtils.generateUrl(Paths.get(firstAttributeList.getAttributeExpression('file').stringValue ?: "error"), this.relativePath)
+		val fileUrl = FileUtils.generatePath(Paths.get(firstAttributeList.getAttributeExpression('file').stringValue ?: "error"), this.relativePath)
 		'''
 			«IF !inputStmts.isEmpty»
 				<ExternalDataSet oid="«name»">

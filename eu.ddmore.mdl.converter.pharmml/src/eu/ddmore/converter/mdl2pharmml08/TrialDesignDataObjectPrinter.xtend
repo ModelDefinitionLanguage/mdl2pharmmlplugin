@@ -831,7 +831,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 //		else{
 //			file = dataPath.toString
 //		}
-		var file = FileUtils.generateUrl(Paths.get(s.firstAttributeList.getAttributeExpression('file').convertToString ?: "error"), this.referencePath)
+		var file = FileUtils.generatePath(Paths.get(s.firstAttributeList.getAttributeExpression('file').convertToString ?: "error"), this.referencePath)
 		if (file !== null && file.length > 0) {
 			res = res + '''				
 				<ExternalFile oid="«BLK_DS_IMPORT_DATA»">

@@ -152,7 +152,7 @@ class TrialDesignDataPrinterTest {
 	}
 	
 	def String getAbsUrlForRelativePath(Path relPath){
-		relPath.toAbsolutePath.normalize.toUri.toURL.toString
+		relPath.toAbsolutePath.normalize.toString//toUri.toURL.toString
 	}
 
 	@Test
