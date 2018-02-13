@@ -1,7 +1,7 @@
 package eu.ddmore.converter.mdl2pharmml08
 
 import com.google.inject.Inject
-import eu.ddmore.mdl.MdlAndLibInjectorProvider
+import eu.ddmore.mdl.tests.MdlAndLibInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.mdl.MclObject
 import eu.ddmore.mdl.provider.BlockDefinitionTable
@@ -9,9 +9,8 @@ import eu.ddmore.mdl.utils.LibraryUtils
 import eu.ddmore.mdl.utils.MDLBuildFixture
 import eu.ddmore.mdl.utils.MdlLibUtils
 import eu.ddmore.mdllib.mdllib.Library
-import org.eclipse.xtext.junit4.InjectWith
-import org.eclipse.xtext.junit4.TemporaryFolder
-import org.eclipse.xtext.junit4.XtextRunner
+import org.eclipse.xtext.testing.InjectWith
+import org.eclipse.xtext.testing.XtextRunner
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -19,6 +18,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static org.junit.Assert.assertEquals
+import org.eclipse.xtext.junit4.TemporaryFolder
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))

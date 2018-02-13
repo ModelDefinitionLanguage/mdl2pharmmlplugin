@@ -34,7 +34,6 @@
 
         <!-- A URL where the p2 repository will be published, the value is set in feature.xml of the mdl-ide-dependencies feature -->
         <sf.publish.location>http://sourceforge.net/projects/ddmore/files/update/mdl-plugin</sf.publish.location>
- 		<mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
      </properties>
 
   <modules>
@@ -193,7 +192,7 @@
 						<artifact>
 							<groupId>eu.ddmore</groupId>
 							<artifactId>eu.ddmore.mdl.converter.pharmml.target</artifactId>
-							<version>1.0.0-SNAPSHOT</version>
+							<version>${project.version}</version>
 						</artifact>
 					</target>
 					<environments>

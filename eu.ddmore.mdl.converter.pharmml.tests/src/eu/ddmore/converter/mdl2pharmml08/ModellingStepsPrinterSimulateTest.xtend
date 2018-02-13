@@ -1,12 +1,12 @@
 package eu.ddmore.converter.mdl2pharmml08
 
 import com.google.inject.Inject
-import eu.ddmore.mdl.MdlAndLibInjectorProvider
+import eu.ddmore.mdl.tests.MdlAndLibInjectorProvider
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.provider.MogDefinitionProvider
-import org.eclipse.xtext.junit4.InjectWith
-import org.eclipse.xtext.junit4.XtextRunner
-import org.eclipse.xtext.junit4.validation.ValidationTestHelper
+import org.eclipse.xtext.testing.InjectWith
+import org.eclipse.xtext.testing.XtextRunner
+import org.eclipse.xtext.testing.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
 
