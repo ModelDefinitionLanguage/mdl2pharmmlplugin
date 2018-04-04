@@ -63,10 +63,6 @@ It is your obligation to read and accept all such terms and conditions prior to 
       <discovery label="DDMoRe Foundation" url="http://www.ddmore.foundation"/>
    </url>
 
-   <includes
-         id="eu.ddmore.libpharmml.feature"
-         version="0.0.0"/>
-
    <plugin
          id="eu.ddmore.mdl.converter.pharmml"
          download-size="0"
