@@ -40,9 +40,22 @@ org.mockito
 org.slf4j.api
 } 
 
-location "http://downloads.mdl.community/repository/libpharmml/releases/0.7.4.v20161122-2223/" libpharmml-repo {  
-	eu.ddmore.libpharmml.feature.feature.group
+
+location "http://downloads.mdl.community/repository/libpharmml08-p2/releases/1.0.2/" libpharmml08-repo {  
+	ch.qos.logback.classic
+	ch.qos.logback.core
+	foundation.ddmore.libpharmml08
+	foundation.ddmore.libpharmml08.source
+	groovy-all
+	slf4j.api
+	xerces.Impl
+	xml-apis
+	xml-resolver
 } 
+
+//location "http://downloads.mdl.community/repository/libpharmml/releases/0.7.4.v20161122-2223/" libpharmml-repo {  
+//	eu.ddmore.libpharmml.feature.feature.group
+//} 
 
 location "http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v20180213-1212/" mdleditor-repo {
 	eu.ddmore.mdl.feature.feature.group

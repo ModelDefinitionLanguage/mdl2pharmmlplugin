@@ -1,8 +1,8 @@
 package eu.ddmore.converter.mdl2pharmml08
 
-import eu.ddmore.libpharmml.PharmMlFactory
 import eu.ddmore.mdl.mdl.Mcl
 import eu.ddmore.mdl.provider.MogDefinitionProvider
+import foundation.ddmore.pharmml08.PharmMlFactory
 import java.io.BufferedWriter
 import java.io.FileInputStream
 import java.io.FileReader
@@ -49,8 +49,7 @@ class ConverterTestHarness {
 			inputStream = new FileInputStream(destFile)
 	    	val libPharmML = PharmMlFactory.getInstance().createLibPharmML();
 			val res = libPharmML.createDomFromResource(inputStream);
-			val validator = libPharmML.getValidator();
-			val rpt = validator.createValidationReport(res);
+			val rpt = res.creationReport;
 			val iter = rpt.errorIterator
 			while(iter.hasNext){
 				val error = iter.next

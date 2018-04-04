@@ -1,55 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde?>
-<!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
-<target name="MDL Editor Target" sequenceNumber="1518524334">
-  <locations>
-    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="org.eclipse.jdt.feature.group" version="3.13.2.v20171130-0906"/>
-      <unit id="org.eclipse.platform.feature.group" version="4.7.2.v20171130-0510"/>
-      <unit id="org.eclipse.equinox.executable.feature.group" version="3.7.2.v20171108-1834"/>
-      <unit id="org.eclipse.pde.feature.group" version="3.13.2.v20171130-0510"/>
-      <unit id="org.eclipse.draw2d.feature.group" version="3.10.100.201606061308"/>
-      <unit id="org.eclipse.emf.sdk.feature.group" version="2.13.0.v20170609-0928"/>
-      <unit id="org.eclipse.xpand" version="2.2.0.v201605260315"/>
-      <unit id="org.eclipse.xtend" version="2.2.0.v201605260315"/>
-      <unit id="org.eclipse.xtend.typesystem.emf" version="2.2.0.v201605260315"/>
-      <unit id="org.eclipse.emf.mwe2.launcher.feature.group" version="2.9.1.201705291011"/>
-      <unit id="org.eclipse.xtext.sdk.feature.group" version="2.12.0.v20170519-1412"/>
-      <repository id="eclipse-repo" location="http://download.eclipse.org/releases/oxygen/"/>
-    </location>
-    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="org.apache.xerces" version="2.9.0.v201101211617"/>
-      <unit id="org.apache.xml.serializer" version="2.7.1.v201005080400"/>
-      <unit id="org.objectweb.asm" version="5.2.0.v20170126-0011"/>
-      <unit id="org.objectweb.asm.commons" version="5.2.0.v20170126-0011"/>
-      <unit id="org.objectweb.asm.analysis" version="5.2.0.v20170126-0011"/>
-      <unit id="org.objectweb.asm.tree" version="5.2.0.v20170126-0011"/>
-      <unit id="org.objectweb.asm.util" version="5.2.0.v20170126-0011"/>
-      <unit id="org.objectweb.asm.xml" version="5.2.0.v20170126-0011"/>
-      <unit id="org.apache.commons.codec" version="1.9.0.v20170208-1614"/>
-      <unit id="org.apache.commons.io" version="2.2.0.v201405211200"/>
-      <unit id="org.apache.log4j" version="1.2.15.v201012070815"/>
-      <unit id="org.apache.xml.resolver" version="1.2.0.v201005080400"/>
-      <unit id="com.google.inject" version="3.0.0.v201605172100"/>
-      <unit id="com.google.guava" version="21.0.0.v20170206-1425"/>
-      <unit id="org.hamcrest.core" version="1.3.0.v201303031735"/>
-      <unit id="org.hamcrest.integration" version="1.3.0.v201305210900"/>
-      <unit id="org.hamcrest.library" version="1.3.0.v201505072020"/>
-      <unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
-      <unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
-      <unit id="org.objenesis" version="1.0.0.v201505121915"/>
-      <unit id="org.junit" version="4.12.0.v201504281640"/>
-      <unit id="org.mockito" version="1.9.5.v201605172210"/>
-      <unit id="org.slf4j.api" version="1.7.10.v20170428-1633"/>
-      <repository id="orbit-tools-deps" location="http://download.eclipse.org/tools/orbit/downloads/drops/R20170919201930/repository/"/>
-    </location>
-    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.libpharmml.feature.feature.group" version="0.7.4.v20161122-2223"/>
-      <repository id="libpharmml-repo" location="http://downloads.mdl.community/repository/libpharmml/releases/0.7.4.v20161122-2223/"/>
-    </location>
-    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="eu.ddmore.mdl.feature.feature.group" version="1.6.2.v20180213-1212"/>
-      <repository id="mdleditor-repo" location="http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v20180213-1212/"/>
-    </location>
-  </locations>
+<?pde version="3.8"?><target name="MDL Editor Target" sequenceNumber="1522839211">
+<locations>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.draw2d.feature.group" version="3.10.100.201606061308"/>
+<unit id="org.eclipse.emf.mwe2.launcher.feature.group" version="2.9.1.201705291011"/>
+<unit id="org.eclipse.emf.sdk.feature.group" version="2.13.0.v20170609-0928"/>
+<unit id="org.eclipse.equinox.executable.feature.group" version="3.7.2.v20171108-1834"/>
+<unit id="org.eclipse.jdt.feature.group" version="3.13.3.v20180301-0715"/>
+<unit id="org.eclipse.pde.feature.group" version="3.13.3.v20180301-1154"/>
+<unit id="org.eclipse.platform.feature.group" version="4.7.3.v20180301-0715"/>
+<unit id="org.eclipse.xpand" version="2.2.0.v201605260315"/>
+<unit id="org.eclipse.xtend" version="2.2.0.v201605260315"/>
+<unit id="org.eclipse.xtend.typesystem.emf" version="2.2.0.v201605260315"/>
+<unit id="org.eclipse.xtext.sdk.feature.group" version="2.12.0.v20170519-1412"/>
+<repository location="http://download.eclipse.org/releases/oxygen/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="com.google.guava" version="21.0.0.v20170206-1425"/>
+<unit id="com.google.inject" version="3.0.0.v201605172100"/>
+<unit id="org.apache.commons.codec" version="1.9.0.v20170208-1614"/>
+<unit id="org.apache.commons.io" version="2.2.0.v201405211200"/>
+<unit id="org.apache.log4j" version="1.2.15.v201012070815"/>
+<unit id="org.apache.xerces" version="2.9.0.v201101211617"/>
+<unit id="org.apache.xml.resolver" version="1.2.0.v201005080400"/>
+<unit id="org.apache.xml.serializer" version="2.7.1.v201005080400"/>
+<unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.core" version="1.3.0.v201303031735"/>
+<unit id="org.hamcrest.integration" version="1.3.0.v201305210900"/>
+<unit id="org.hamcrest.library" version="1.3.0.v201505072020"/>
+<unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
+<unit id="org.junit" version="4.12.0.v201504281640"/>
+<unit id="org.mockito" version="1.9.5.v201605172210"/>
+<unit id="org.objectweb.asm" version="5.2.0.v20170126-0011"/>
+<unit id="org.objectweb.asm.analysis" version="5.2.0.v20170126-0011"/>
+<unit id="org.objectweb.asm.commons" version="5.2.0.v20170126-0011"/>
+<unit id="org.objectweb.asm.tree" version="5.2.0.v20170126-0011"/>
+<unit id="org.objectweb.asm.util" version="5.2.0.v20170126-0011"/>
+<unit id="org.objectweb.asm.xml" version="5.2.0.v20170126-0011"/>
+<unit id="org.objenesis" version="1.0.0.v201505121915"/>
+<unit id="org.slf4j.api" version="1.7.10.v20170428-1633"/>
+<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20170919201930/repository/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="eu.ddmore.mdl.feature.feature.group" version="1.6.2.v20180213-1212"/>
+<repository location="http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v20180213-1212/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="ch.qos.logback.classic" version="1.0.13"/>
+<unit id="ch.qos.logback.classic.source" version="1.0.13"/>
+<unit id="ch.qos.logback.core" version="1.0.13"/>
+<unit id="ch.qos.logback.core.source" version="1.0.13"/>
+<unit id="com.sun.xml.bind.jaxb-core" version="2.2.11"/>
+<unit id="com.sun.xml.bind.jaxb-core.source" version="2.2.11"/>
+<unit id="com.sun.xml.bind.jaxb-impl" version="2.2.11"/>
+<unit id="com.sun.xml.bind.jaxb-impl.source" version="2.2.11"/>
+<unit id="foundation.ddmore.libpharmml08" version="1.0.2"/>
+<unit id="foundation.ddmore.libpharmml08.source" version="1.0.2"/>
+<unit id="groovy-all" version="2.4.10"/>
+<unit id="groovy-all.source" version="2.4.10"/>
+<unit id="slf4j.api" version="1.7.5"/>
+<unit id="slf4j.api.source" version="1.7.5"/>
+<unit id="xerces.Impl" version="2.11.0"/>
+<unit id="xerces.Impl.source" version="2.11.0"/>
+<unit id="xml-apis" version="1.4.1"/>
+<unit id="xml-apis.source" version="1.4.1"/>
+<unit id="xml-resolver" version="1.2.0"/>
+<unit id="xml-resolver.source" version="1.2.0"/>
+<repository location="http://downloads.mdl.community/repository/libpharmml08-p2/releases/1.0.2/"/>
+</location>
+</locations>
 </target>

@@ -770,6 +770,7 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 			case ListDefinitionTable::DVID_USE_VALUE   : "dvid"
 			case ListDefinitionTable::VARLVL_USE_VALUE: "occasion"
 			case ListDefinitionTable::VARIABLE_USE_VALUE: "reg"
+			case 'cens': "censoring"
 			case ListDefinitionTable::COV_USE_VALUE,
 			case ListDefinitionTable::CATCOV_USE_VALUE:
 				if(isRegressor) "reg" else "covariate"

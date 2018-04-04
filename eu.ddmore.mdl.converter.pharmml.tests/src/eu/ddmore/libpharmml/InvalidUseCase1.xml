@@ -19,7 +19,7 @@
 		symbId="combinedError1"
 		symbolType="real">
 	    <Description>Combined additive ad proportional for 1 epsilon</Description>
-	    <FunctionArgument symbolType="real" symbId="additive"/>
+	    <FunctionArgumnt symbolType="real" symbId="additive"/>
 	    <FunctionArgument symbolType="real" symbId="proportional"/>
 	    <FunctionArgument symbolType="real" symbId="f"/>
 	    <Definition>
