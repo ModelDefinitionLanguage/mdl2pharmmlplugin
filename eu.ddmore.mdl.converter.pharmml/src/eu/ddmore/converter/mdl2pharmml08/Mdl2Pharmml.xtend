@@ -11,12 +11,12 @@ import eu.ddmore.mdl.provider.MogDefinitionProvider
 import eu.ddmore.mdl.utils.DomainObjectModelUtils
 import eu.ddmore.mdl.utils.ExpressionUtils
 import eu.ddmore.mdl.utils.MdlUtils
+import java.nio.file.Path
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtext.EcoreUtil2
 
 import static eu.ddmore.converter.mdl2pharmml08.Constants.*
-import java.nio.file.Paths
 
 class Mdl2Pharmml {
 //	static val mdlVersion = "6.0"
@@ -67,25 +67,24 @@ class Mdl2Pharmml {
 	
 
   	def convertToPharmML(MclObject mogInput) {
-  		convertToPharmML(mogInput, null)
+  		convertToPharmML(mogInput, false, null, null)
   	}
   	
-  	def convertToPharmML(MclObject mogInput, String mdlParentPath) {
+  	def convertToPharmML(MclObject mogInput, boolean absDataPath, Path mdlFile, Path pharmMLFile) {
   		mdlRoot = rewriteTree(EcoreUtil2.getContainerOfType(mogInput.eContainer, Mcl))
   		val mog = mdlRoot.getMogObj(mogInput.name)
 		val mObj = mog.mdlObj
-		val relativePath = if(mdlParentPath !== null) Paths.get(mdlParentPath) else null
   		
 		val paramWriter = if(mog.isParamObjDefined){
 			new StandardParameterWriter(mog.mdlObj)//, idLambda)
 		}
 		else{
-			new PriorParameterWriter(mObj, mog.priorObj, relativePath) //, idLambda)
+			new PriorParameterWriter(mObj, mog.priorObj, absDataPath, mdlFile, pharmMLFile) //, idLambda)
 		}
 		val TrialDesignObjectPrinter trialDesignWriter = if(mog.isDesignObjDefined)
 									new TrialDesignDesignObjectPrinter(mog, paramWriter)
 								else
-									new TrialDesignDataObjectPrinter(mog, paramWriter, relativePath)
+									new TrialDesignDataObjectPrinter(mog, paramWriter, absDataPath, mdlFile, pharmMLFile)
 		'''
 			<?xml version="1.0" encoding="UTF-8"?>
 			<PharmML 

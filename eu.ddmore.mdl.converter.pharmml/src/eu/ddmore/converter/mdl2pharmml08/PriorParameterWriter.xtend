@@ -37,16 +37,20 @@ class PriorParameterWriter extends AbstractParameterWriter {
 
 	val MclObject priorObject
 	val Set<String> writtenParams
-	val Path relativePath
+	val Path mdlFilePath
+	val Path pharmmlFilePath
+	val boolean absDataPath
 	
 	new(MclObject mO, MclObject pO){
-		this(mO, pO, null)
+		this(mO, pO, false, null, null)
 	}
 
-	new(MclObject mO, MclObject pO, Path relativePath){
+	new(MclObject mO, MclObject pO, boolean absDataPath, Path mdlFilePath, Path pharmmlFilePath){
 		super(mO) 
 		this.priorObject = pO
-		this.relativePath = relativePath
+		this.mdlFilePath = mdlFilePath
+		this.pharmmlFilePath = pharmmlFilePath
+		this.absDataPath = absDataPath
 		this.writtenParams = new HashSet<String>
 	}
 	
@@ -298,7 +302,14 @@ class PriorParameterWriter extends AbstractParameterWriter {
 				inputStmts.add(stmt)
 			]
 		]
-		val fileUrl = FileUtils.generatePath(Paths.get(firstAttributeList.getAttributeExpression('file').stringValue ?: "error"), this.relativePath)
+		val Path dataPath = Paths.get(firstAttributeList.getAttributeExpression('file').stringValue ?: "error")
+		val fileUrl = FileUtils.generateDataPath(this.absDataPath, mdlFilePath, dataPath, pharmmlFilePath).toString
+//		val String fileUrl = if(dataPath.isAbsolute || this.mdlFilePath === null || this.pharmmlFilePath === null)
+//				dataPath.toString
+//			else if(this.absDataPath)
+//				dataPath.toAbsolutePath.normalize.toString
+//			else
+//				FileUtils.makeNewRelativeDataPath(mdlFilePath, dataPath, pharmmlFilePath).toString
 		'''
 			«IF !inputStmts.isEmpty»
 				<ExternalDataSet oid="«name»">

@@ -19,6 +19,7 @@ import org.junit.runner.RunWith
 
 import static org.junit.Assert.assertEquals
 import org.eclipse.xtext.junit4.TemporaryFolder
+import java.nio.file.Paths
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(MdlAndLibInjectorProvider))
@@ -212,8 +213,13 @@ class PriorParameterWriterTest {
 	def void testWriteParamFromData(){
 		val root = createRoot
 		val priorObj = root.createObject("pObj", libDefns.getObjectDefinition('priorObj'))
-		this.testInstance = new PriorParameterWriter(null, priorObj, null)
-		val dataset = createDataset(priorObj, "simple3_prior.csv")
+		val currDir = Paths.get("").toAbsolutePath;
+		val mdlFile = Paths.get(currDir.toString, "tst.mdl")
+		val pharmmlFile = Paths.get(currDir.toString, "pharmml", "tst.xml")
+		this.testInstance = new PriorParameterWriter(null, priorObj, false, mdlFile, pharmmlFile)
+		val dataFileName = "simple3_prior.csv"
+		val dataset = createDataset(priorObj, dataFileName)
+		val expectedDataPath = Paths.get("..", dataFileName)
 		val actual = testInstance.writeDataset(dataset)
 		val expected = '''
 		<ExternalDataSet oid="d1">
@@ -255,7 +261,70 @@ class PriorParameterWriterTest {
 					<ds:Column columnId="bin_tlag" valueType="real" columnNum="4" columnType="undefined"/>
 				</ds:Definition>
 				<ds:ExternalFile oid="MDL__fileOid_d1">
-					<ds:path>simple3_prior.csv</ds:path>
+					<ds:path>«expectedDataPath»</ds:path>
+					<ds:format>CSV</ds:format>
+					<ds:delimiter>COMMA</ds:delimiter>
+				</ds:ExternalFile>
+			</ds:DataSet>
+		</ExternalDataSet>
+		'''
+		assertEquals("Output as expected", expected, actual.toString)
+	}
+
+
+	@Test
+	def void testWriteParamFromDataRelativeToAbs(){
+		val root = createRoot
+		val priorObj = root.createObject("pObj", libDefns.getObjectDefinition('priorObj'))
+		val currDir = Paths.get("").toAbsolutePath;
+		val mdlFile = Paths.get(currDir.toString, "tst.mdl")
+		val pharmmlFile = Paths.get(currDir.toString, "pharmml", "tst.xml")
+		this.testInstance = new PriorParameterWriter(null, priorObj, true, mdlFile, pharmmlFile)
+		val dataFileName = "simple3_prior.csv"
+		val dataset = createDataset(priorObj, dataFileName)
+		val expectedDataPath = Paths.get("", dataFileName).toAbsolutePath.normalize
+		val actual = testInstance.writeDataset(dataset)
+		val expected = '''
+		<ExternalDataSet oid="d1">
+			<ColumnMapping>
+				<ds:ColumnRef columnIdRef="p_ka_v"/>
+				<ct:SymbRef blkIdRef="pm" symbIdRef="KA_V_PROBS"/>
+			</ColumnMapping>
+			<ColumnMapping>
+				<ds:ColumnRef columnIdRef="bin_ka"/>
+				<ct:Assign>
+					<ct:VectorSelector>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="KA_V_BINS"/>
+						<ct:Cell>
+							<ct:Int>1</ct:Int>
+						</ct:Cell>
+					</ct:VectorSelector>
+				</ct:Assign>
+			</ColumnMapping>
+			<ColumnMapping>
+				<ds:ColumnRef columnIdRef="bin_v"/>
+				<ct:Assign>
+					<ct:VectorSelector>
+						<ct:SymbRef blkIdRef="pm" symbIdRef="KA_V_BINS"/>
+						<ct:Cell>
+							<ct:Int>2</ct:Int>
+						</ct:Cell>
+					</ct:VectorSelector>
+				</ct:Assign>
+			</ColumnMapping>
+			<ColumnMapping>
+				<ds:ColumnRef columnIdRef="bin_tlag"/>
+				<ct:SymbRef blkIdRef="pm" symbIdRef="TLAG_BINS"/>
+			</ColumnMapping>
+			<ds:DataSet>
+				<ds:Definition>
+					<ds:Column columnId="p_ka_v" valueType="real" columnNum="1" columnType="undefined"/>
+					<ds:Column columnId="bin_ka" valueType="real" columnNum="2" columnType="undefined"/>
+					<ds:Column columnId="bin_v" valueType="real" columnNum="3" columnType="undefined"/>
+					<ds:Column columnId="bin_tlag" valueType="real" columnNum="4" columnType="undefined"/>
+				</ds:Definition>
+				<ds:ExternalFile oid="MDL__fileOid_d1">
+					<ds:path>«expectedDataPath»</ds:path>
 					<ds:format>CSV</ds:format>
 					<ds:delimiter>COMMA</ds:delimiter>
 				</ds:ExternalFile>
@@ -270,7 +339,7 @@ class PriorParameterWriterTest {
 	def void testWriteParamFromDataWithAbsoluteUrl(){
 		val root = createRoot
 		val priorObj = root.createObject("pObj", libDefns.getObjectDefinition('priorObj'))
-		this.testInstance = new PriorParameterWriter(null, priorObj, null)
+		this.testInstance = new PriorParameterWriter(null, priorObj)
 		val dataset = createDataset(priorObj, "/foo/bar/absolute/simple3_prior.csv")
 		val actual = testInstance.writeDataset(dataset)
 		val expected = '''

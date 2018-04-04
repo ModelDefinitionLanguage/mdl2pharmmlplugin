@@ -43,22 +43,27 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 	val MclObject mObj
 	val MclObject dObj
 	val AbstractParameterWriter priorDsWriter
-	val Path referencePath;
+	val Path mdlFilePath
+	val Path pharmmlFilePath
+	val boolean absDataPath
+	
 	
 	
 	new(MclObject mog, AbstractParameterWriter priorDsWriter){
-		this(mog, priorDsWriter, null)
+		this(mog, priorDsWriter, false, null, null)
 	}
 	
 	/**
 	 * The path to the source directory where dependent files are located.
 	 * If provide then the dependent files are written as an absolute paths. 
 	 */
-	new(MclObject mog, AbstractParameterWriter priorDsWriter, Path referencePath){
+	new(MclObject mog, AbstractParameterWriter priorDsWriter, boolean absDataPath, Path mdlFilePath, Path pharmmlFilePath){
 		mObj = mog.mdlObj
 		dObj = mog.dataObj
 		this.priorDsWriter = priorDsWriter
-		this.referencePath = referencePath
+		this.mdlFilePath = mdlFilePath
+		this.pharmmlFilePath = pharmmlFilePath
+		this.absDataPath = absDataPath
 	}
 
 	override writeTrialDesign()'''
@@ -816,22 +821,15 @@ class TrialDesignDataObjectPrinter implements TrialDesignObjectPrinter {
 	protected def print_ds_ExternalFile() {
 		var res = "";
 		val s = dObj.getDataSourceStmt
-//		var file = "";
-//		file = s.firstAttributeList.getAttributeExpression('file').convertToString
-//		var dataPath = Paths.get(file)
-//		if(!dataPath.isAbsolute){
-//			// Has reference path so write as an absolute file
-//			if(this.referencePath !== null){
-//				dataPath = Paths.get(this.referencePath.toString, dataPath.toString)
-//				if(Files.exists(dataPath, #[ LinkOption.NOFOLLOW_LINKS ])){
-//					file = dataPath.toAbsolutePath().normalize().toUri().toURL().toString();
-//				}
-//			}
-//		}
-//		else{
-//			file = dataPath.toString
-//		}
-		var file = FileUtils.generatePath(Paths.get(s.firstAttributeList.getAttributeExpression('file').convertToString ?: "error"), this.referencePath)
+		val Path dataPath = Paths.get(s.firstAttributeList.getAttributeExpression('file').stringValue ?: "error")
+		val file = FileUtils.generateDataPath(this.absDataPath, mdlFilePath, dataPath, pharmmlFilePath).toString
+//		val String file = if(dataPath.isAbsolute || this.mdlFilePath === null || this.pharmmlFilePath === null)
+//				dataPath.toString
+//			else if(this.absDataPath)
+//				dataPath.toAbsolutePath.normalize.toString
+//			else
+//				FileUtils.makeNewRelativeDataPath(mdlFilePath, dataPath, pharmmlFilePath).toString
+//		var file = FileUtils.makeNewRelativeDataPath(Paths.get(s.firstAttributeList.getAttributeExpression('file').convertToString ?: "error"), this.referencePath)
 		if (file !== null && file.length > 0) {
 			res = res + '''				
 				<ExternalFile oid="«BLK_DS_IMPORT_DATA»">
