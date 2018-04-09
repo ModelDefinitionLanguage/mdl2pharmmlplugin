@@ -395,4 +395,9 @@ class Mcl2PharmMLConverterTest {
 	def void testComplex_PK_Model(){
 		validateConversion("Complex_PK_Model")
 	}
+	
+	@Ignore("Triggers bug that's not fixed yet. Issue #1 in github")
+	def void testUC006_00_Holford_PK_DEQ_linCov_libErr_Tlag_multivariate(){
+		validateConversion("UC006_00_Holford_PK_DEQ_linCov_libErr_Tlag_multivariate")
+	}
 }
