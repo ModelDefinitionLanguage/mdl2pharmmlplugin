@@ -57,6 +57,6 @@ location "http://downloads.mdl.community/repository/libpharmml08-p2/releases/1.0
 //	eu.ddmore.libpharmml.feature.feature.group
 //} 
 
-location "http://downloads.mdl.community/repository/mdleditor/snapshots/1.6.2.v20180213-1212/" mdleditor-repo {
+location "http://downloads.mdl.community/repository/mdleditor/releases/1.6.2/" mdleditor-repo {
 	eu.ddmore.mdl.feature.feature.group
 }
